@@ -1,0 +1,163 @@
+local DiscordLib = loadstring(game:HttpGet"https://raw.githubusercontent.com/dawid-scripts/UI-Libs/main/discord%20lib.txt")()
+
+local win = DiscordLib:Window("高脚本[测试阶段]")
+
+local serv = win:Server("通用", "")
+
+local btns = serv:Channel("公告")
+
+btns:Button("点击查看公告", function()
+    DiscordLib:Notification("公告", "欢迎使用脚本，目前缺少通用的脚本欢迎投稿,作者QQ3211588615,", "确定")
+end)
+
+-- 添加“复制作者QQ”按钮
+btns:Button("复制作者QQ", function()
+    local qq = "3211588615"
+    setclipboard(qq)
+    DiscordLib:Notification("通知", "已复制作者QQ", "好的！")
+end)
+
+btns:Seperator()  
+btns:Button("获取最高等级", function()
+    DiscordLib:Notification("666这都没有", "讲的到挺美", "?")
+end)
+
+local tgls = serv:Channel("通用脚本")
+
+-- 添加飞车按钮
+tgls:Button("飞车", function()
+    local success, result = pcall(loadstring, game:HttpGet("https://pastebin.com/raw/GDxHzZTA", true))
+    if success then
+        result()
+        DiscordLib:Notification("通知", "飞车脚本已成功运行", "好的！")
+    else
+        DiscordLib:Notification("通知", "飞车脚本运行失败", "好的！")
+    end
+end)
+-- 添加飞行按钮
+tgls:Button("飞行", function()
+    local success, result = pcall(--ARCEUS X FLY V2 SCRIPT BY SHUOHUOQIANG
+loadstring("\108\111\97\100\115\116\114\105\110\103\40\103\97\109\101\58\72\116\116\112\71\101\116\40\40\39\104\116\116\112\115\58\47\47\103\105\115\116\46\103\105\116\104\117\98\117\115\101\114\99\111\110\116\101\110\116\46\99\111\109\47\109\101\111\122\111\110\101\89\84\47\98\102\48\51\55\100\102\102\57\102\48\97\55\48\48\49\55\51\48\52\100\100\100\54\55\102\100\99\100\51\55\48\47\114\97\119\47\101\49\52\101\55\52\102\52\50\53\98\48\54\48\100\102\53\50\51\51\52\51\99\102\51\48\98\55\56\55\48\55\52\101\98\51\99\53\100\50\47\97\114\99\101\117\115\37\50\53\50\48\120\37\50\53\50\48\102\108\121\37\50\53\50\48\50\37\50\53\50\48\111\98\102\108\117\99\97\116\111\114\39\41\44\116\114\117\101\41\41\40\41\10\10")())
+    if success then
+        result()
+        DiscordLib:Notification("通知", "飞车脚本已成功运行", "好的！")
+    else
+        DiscordLib:Notification("通知", "飞车脚本运行失败", "好的！")
+    end
+end)
+
+tgls:Toggle("没用", false, function(bool)
+    print(bool)
+end)
+
+local lbls = serv:Channel("公告")
+
+lbls:Label("欢迎使用高脚本，此脚本采用了全新的UI")
+
+local bnds = serv:Channel("按键绑定")
+
+bnds:Bind("78", Enum.KeyCode.RightShift, function()
+    print("已杀死所有人！")
+end)
+
+serv:Channel("阿玛特拉斯")
+
+-- 在 "主要" 服务器中添加新的频道（模拟选项卡）
+local mainServ = win:Server("飞扬尘土", "http://www.roblox.com/asset/?id=6031075938")
+local newChannel = mainServ:Channel("运行脚本")
+
+-- 在新频道中添加一个按钮示例
+newChannel:Button("运行脚本", function()
+    -- 尝试加载并运行指定链接的脚本
+    local success, result = pcall(loadstring, game:HttpGet("https://raw.githubusercontent.com/xxqLgnd/Utilities/main/DustyTrip", true))
+    if success then
+        result()
+        DiscordLib:Notification("通知", "成功运行", "好的！")
+    else
+        DiscordLib:Notification("通知", "运行脚本失败", "好的！")
+    end
+end)
+
+local btnsInMain = mainServ:Channel("传送地图")
+
+btnsInMain:Button("提示", function()
+    DiscordLib:Notification("提示", "传送地图功能如果想让好友进入进入地图，让好友加入你即可,部分危险的按钮就是,进入时要把物品全都放回去，否则消失,只能拿AK", "好的！")
+end)
+
+-- 添加文本框
+btnsInMain:Textbox("传送地图，输入地图的ID", "请输入地图ID", true, function(inputText)
+    local mapId = tonumber(inputText)
+    if mapId then
+        local LocalPlayer = game.Players.LocalPlayer
+        if LocalPlayer then
+            game:GetService('TeleportService'):Teleport(mapId, LocalPlayer)
+            DiscordLib:Notification("通知", "已传送到地图 ID: ".. mapId, "好的！")
+        else
+            DiscordLib:Notification("通知", "无法获取本地玩家对象", "好的！")
+        end
+    else
+        DiscordLib:Notification("通知", "输入的地图 ID 无效", "好的！")
+    end
+end)
+
+-- 在“提示”按钮下方添加 13 个按钮
+btnsInMain:Button("传送[大厅]", function()
+    local LocalPlayer = game.Players.LocalPlayer
+    if LocalPlayer then
+        game:GetService('TeleportService'):Teleport(16389395869, LocalPlayer)
+    end
+    DiscordLib:Notification("通知", "点击了按钮 1 并尝试传送", "好的！")
+end)
+
+btnsInMain:Button("按钮 2", function()
+    DiscordLib:Notification("通知", "点击了按钮 2", "好的！")
+end)
+
+btnsInMain:Button("按钮 3", function()
+    DiscordLib:Notification("通知", "点击了按钮 3", "好的！")
+end)
+
+btnsInMain:Button("按钮 4", function()
+    DiscordLib:Notification("通知", "点击了按钮 4", "好的！")
+end)
+
+btnsInMain:Button("按钮 5", function()
+    DiscordLib:Notification("通知", "点击了按钮 5", "好的！")
+end)
+
+btnsInMain:Button("按钮 6", function()
+    DiscordLib:Notification("通知", "点击了按钮 6", "好的！")
+end)
+
+btnsInMain:Button("按钮 7", function()
+    DiscordLib:Notification("通知", "点击了按钮 7", "好的！")
+end)
+
+btnsInMain:Button("按钮 8", function()
+    DiscordLib:Notification("通知", "点击了按钮 8", "好的！")
+end)
+
+btnsInMain:Button("按钮 9", function()
+    DiscordLib:Notification("通知", "点击了按钮 9", "好的！")
+end)
+
+btnsInMain:Button("按钮 10", function()
+    DiscordLib:Notification("通知", "点击了按钮 10", "好的！")
+end)
+
+btnsInMain:Button("按钮 11", function()
+    DiscordLib:Notification("通知", "点击了按钮 11", "好的！")
+end)
+
+btnsInMain:Button("按钮 12", function()
+    DiscordLib:Notification("通知", "点击了按钮 12", "好的！")
+end)
+
+btnsInMain:Button("按钮 13", function()
+    DiscordLib:Notification("通知", "点击了按钮 13", "好的！")
+end)
+
+-- 添加杂项频道
+local miscChannel = mainServ:Channel("杂项")
+
+-- 
