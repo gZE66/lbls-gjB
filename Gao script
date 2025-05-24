@@ -101,7 +101,7 @@ btnsInMain:Textbox("传送地图，输入地图的ID", "请输入地图ID", true
 end)
 
 -- 在“提示”按钮下方添加 13 个按钮
-btnsInMain:Button("传送[大厅]", function()
+btnsInMain:Button("按钮 1", function()
     local LocalPlayer = game.Players.LocalPlayer
     if LocalPlayer then
         game:GetService('TeleportService'):Teleport(16389395869, LocalPlayer)
@@ -160,4 +160,39 @@ end)
 -- 添加杂项频道
 local miscChannel = mainServ:Channel("杂项")
 
--- 
+-- 添加“退出游戏”按钮，点击时有二次确认窗口
+miscChannel:Button("退出游戏", function()
+    DiscordLib:Confirm("确认退出", "你确定要退出游戏吗？", function(confirmed)
+        if confirmed then
+            game:Shutdown()
+        else
+            DiscordLib:Notification("通知", "已取消退出游戏", "好的！")
+        end
+    end)
+end)
+
+-- 添加“重新加入”按钮
+miscChannel:Button("重新加入", function()
+    local LocalPlayer = game.Players.LocalPlayer
+    if LocalPlayer then
+        local currentPlaceId = game.PlaceId
+        game:GetService('TeleportService'):Teleport(currentPlaceId, LocalPlayer)
+        DiscordLib:Notification("通知", "已重新加入当前游戏", "好的！")
+    else
+        DiscordLib:Notification("通知", "无法获取本地玩家对象", "好的！")
+    end
+end)
+
+-- 添加交流群频道
+local groupChannel = mainServ:Channel("交流群")
+-- 添加复制交流群按钮
+groupChannel:Button("复制交流群", function()
+    local groupNum = "1022556003"
+    setclipboard(groupNum)
+    DiscordLib:Notification("通知", "已复制交流群号", "好的！")
+end)
+
+-- 添加“其他＆娱乐”服务器
+local otherAndEntertainmentServ = win:Server("其他＆娱乐", "")
+-- 在“其他＆娱乐”服务器中添加“播放音乐”频道
+local musicChannel = otherAndEntertainmentServ:Channel("播放音乐")
