@@ -1,0 +1,521 @@
+-- 加载 Rayfield UI 库
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+-- 创建主窗口
+local Window = Rayfield:CreateWindow({
+    Name = "高脚本【测试阶段】",
+    LoadingTitle = "正在加载功能...",
+    LoadingSubtitle = "by qq高老八",
+    ConfigurationSaving = {
+        Enabled = true,
+        FolderName = "AdvancedPlayerTracker",
+        FileName = "Config"
+    },
+    KeySystem = false
+})
+
+-- 创建"关于"选项卡（放在第一位）
+local AboutTab = Window:CreateTab("关于", 4483362458)
+
+-- 在关于选项卡中添加信息
+AboutTab:CreateSection("脚本信息")
+AboutTab:CreateLabel("高级玩家追踪与控制脚本")
+AboutTab:CreateLabel("v0.2")
+AboutTab:CreateLabel("作者: qq高老八")
+
+AboutTab:CreateSection("功能说明")
+AboutTab:CreateLabel("- 玩家追踪与高亮显示")
+AboutTab:CreateLabel("- 属性修改器")
+AboutTab:CreateLabel("- 飞行与穿墙功能")
+AboutTab:CreateLabel("- 准星辅助")
+
+-- 创建"主要"选项卡
+local MainTab = Window:CreateTab("主要", 4483362458)
+
+-- 存储所有玩家的追踪信息
+local trackedPlayers = {}
+local trackingEnabled = false
+local crosshairEnabled = false
+local crosshairFrame = nil
+
+-- 玩家属性变量
+local walkSpeed = 16
+local jumpPower = 50
+local cameraFov = 70
+
+-- 添加功能按钮部分
+MainTab:CreateSection("主要&通用")
+
+-- 添加飞行按钮
+MainTab:CreateButton({
+    Name = "飞车",
+    Callback = function()
+        Rayfield:Notify({
+            Title = "正在加载飞行脚本",
+            Content = "请稍候...",
+            Duration = 3,
+            Image = 4483362458
+        })
+        
+        -- 加载飞行脚本
+        local success, err = pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/gZE66/lbls-gjB/refs/heads/main/vfly"))()
+        end)
+        
+        if success then
+            Rayfield:Notify({
+                Title = "飞行脚本已启用",
+                Content = "按设定的键位使用飞行功能",
+                Duration = 5,
+                Image = 4483362458
+            })
+        else
+            Rayfield:Notify({
+                Title = "加载失败",
+                Content = "无法加载飞行脚本: "..tostring(err),
+                Duration = 5,
+                Image = 4483362458
+            })
+        end
+    end,
+})
+
+-- 添加穿墙按钮
+MainTab:CreateButton({
+    Name = "穿墙脚本",
+    Callback = function()
+        Rayfield:Notify({
+            Title = "正在加载穿墙脚本",
+            Content = "请稍候...",
+            Duration = 3,
+            Image = 4483362458
+        })
+        
+        -- 加载穿墙脚本
+        local success, err = pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/gZE66/lbls-gjB/refs/heads/main/nc"))()
+        end)
+        
+        if success then
+            Rayfield:Notify({
+                Title = "穿墙已启用",
+                Content = "现在可以穿透墙壁和障碍物",
+                Duration = 5,
+                Image = 4483362458
+            })
+        else
+            Rayfield:Notify({
+                Title = "加载失败",
+                Content = "无法加载穿墙脚本: "..tostring(err),
+                Duration = 5,
+                Image = 4483362458
+            })
+        end
+    end,
+})
+
+-- 添加段落标签
+MainTab:CreateSection("玩家追踪设置")
+
+-- 创建追踪开关
+local TrackingToggle = MainTab:CreateToggle({
+    Name = "定位玩家【高老八自制】",
+    CurrentValue = false,
+    Flag = "PlayerTrackingToggle",
+    Callback = function(Value)
+        trackingEnabled = Value
+        if Value then
+            StartTracking()
+            Rayfield:Notify({
+                Title = "定位已启用",
+                Content = "正在追踪所有玩家位置",
+                Duration = 3,
+                Image = 4483362458
+            })
+        else
+            StopTracking()
+            Rayfield:Notify({
+                Title = "定位禁用",
+                Content = "已停止追踪玩家位置",
+                Duration = 3,
+                Image = 4483362458
+            })
+        end
+    end,
+})
+
+-- 创建准星开关
+local CrosshairToggle = MainTab:CreateToggle({
+    Name = "辅助准星",
+    CurrentValue = false,
+    Flag = "CrosshairToggle",
+    Callback = function(Value)
+        crosshairEnabled = Value
+        if Value then
+            CreateCrosshair()
+            Rayfield:Notify({
+                Title = "辅助准星",
+                Content = "已启用屏幕准星",
+                Duration = 2,
+                Image = 4483362458
+            })
+        else
+            RemoveCrosshair()
+            Rayfield:Notify({
+                Title = "辅助准星",
+                Content = "已禁用屏幕准星",
+                Duration = 2,
+                Image = 4483362458
+            })
+        end
+    end,
+})
+
+-- 添加属性修改部分
+MainTab:CreateSection("玩家属性修改")
+
+-- 修改移动速度
+local SpeedInput = MainTab:CreateInput({
+    Name = "移动速度 (默认16)",
+    PlaceholderText = tostring(walkSpeed),
+    RemoveTextAfterFocusLost = false,
+    Callback = function(Text)
+        local newSpeed = tonumber(Text)
+        if newSpeed and newSpeed > 0 then
+            walkSpeed = newSpeed
+            ApplyPlayerProperties()
+            Rayfield:Notify({
+                Title = "速度修改",
+                Content = "移动速度已设置为: "..walkSpeed,
+                Duration = 3,
+                Image = 4483362458
+            })
+        else
+            Rayfield:Notify({
+                Title = "输入错误",
+                Content = "请输入有效的数字",
+                Duration = 3,
+                Image = 4483362458
+            })
+        end
+    end,
+})
+
+-- 修改跳跃高度
+local JumpInput = MainTab:CreateInput({
+    Name = "跳跃高度 (默认50)",
+    PlaceholderText = tostring(jumpPower),
+    RemoveTextAfterFocusLost = false,
+    Callback = function(Text)
+        local newJump = tonumber(Text)
+        if newJump and newJump > 0 then
+            jumpPower = newJump
+            ApplyPlayerProperties()
+            Rayfield:Notify({
+                Title = "跳跃修改",
+                Content = "跳跃高度已设置为: "..jumpPower,
+                Duration = 3,
+                Image = 4483362458
+            })
+        else
+            Rayfield:Notify({
+                Title = "输入错误",
+                Content = "请输入有效的数字",
+                Duration = 3,
+                Image = 4483362458
+            })
+        end
+    end,
+})
+
+-- 修改视野
+local FovInput = MainTab:CreateInput({
+    Name = "视野范围 (默认70)",
+    PlaceholderText = tostring(cameraFov),
+    RemoveTextAfterFocusLost = false,
+    Callback = function(Text)
+        local newFov = tonumber(Text)
+        if newFov and newFov > 0 and newFov <= 120 then
+            cameraFov = newFov
+            ApplyPlayerProperties()
+            Rayfield:Notify({
+                Title = "视野修改",
+                Content = "视野已设置为: "..cameraFov,
+                Duration = 3,
+                Image = 4483362458
+            })
+        else
+            Rayfield:Notify({
+                Title = "输入错误",
+                Content = "请输入0-120之间的数字",
+                Duration = 3,
+                Image = 4483362458
+            })
+        end
+    end,
+})
+
+-- 应用玩家属性函数
+function ApplyPlayerProperties()
+    local player = game:GetService("Players").LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    
+    repeat wait() until character:FindFirstChild("Humanoid")
+    
+    character.Humanoid.WalkSpeed = walkSpeed
+    character.Humanoid.JumpPower = jumpPower
+    game:GetService("Workspace").CurrentCamera.FieldOfView = cameraFov
+end
+
+-- 监听角色变化自动应用属性
+game:GetService("Players").LocalPlayer.CharacterAdded:Connect(ApplyPlayerProperties)
+
+-- 创建准星函数
+function CreateCrosshair()
+    if crosshairFrame then
+        crosshairFrame:Destroy()
+    end
+    
+    local playerGui = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+    
+    local screenGui = Instance.new("ScreenGui")
+    screenGui.Name = "CrosshairGui"
+    screenGui.ResetOnSpawn = false
+    screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    screenGui.Parent = playerGui
+    
+    crosshairFrame = Instance.new("Frame")
+    crosshairFrame.Name = "Crosshair"
+    crosshairFrame.Size = UDim2.new(0, 20, 0, 20)
+    crosshairFrame.Position = UDim2.new(0.5, -10, 0.5, -10)
+    crosshairFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+    crosshairFrame.BackgroundTransparency = 1
+    crosshairFrame.ZIndex = 9999
+    crosshairFrame.Parent = screenGui
+    
+    local circle = Instance.new("Frame")
+    circle.Name = "Circle"
+    circle.Size = UDim2.new(1, 0, 1, 0)
+    circle.BackgroundColor3 = Color3.new(0, 0, 0)
+    circle.BackgroundTransparency = 0
+    circle.BorderSizePixel = 0
+    circle.ZIndex = 10000
+    
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(1, 0)
+    corner.Parent = circle
+    
+    circle.Parent = crosshairFrame
+end
+
+-- 移除准星函数
+function RemoveCrosshair()
+    if crosshairFrame then
+        crosshairFrame:Destroy()
+        crosshairFrame = nil
+    end
+end
+
+-- 改进后的追踪单个玩家函数
+function TrackPlayer(player)
+    if trackedPlayers[player] then return end
+    
+    trackedPlayers[player] = {}
+    
+    local function setupCharacter(character)
+        if not character then return end
+        
+        repeat wait() until character:FindFirstChild("HumanoidRootPart") and character:FindFirstChild("Head")
+        
+        -- 创建白色半透明轮廓
+        local highlight = Instance.new("Highlight")
+        highlight.Name = "PlayerTrackerHighlight"
+        highlight.FillColor = Color3.fromRGB(255, 255, 255)
+        highlight.OutlineColor = Color3.fromRGB(255, 255, 255)
+        highlight.FillTransparency = 0.7
+        highlight.OutlineTransparency = 0.3
+        highlight.Adornee = character.HumanoidRootPart
+        highlight.Parent = character
+        trackedPlayers[player].highlight = highlight
+        
+        -- 创建动态方框
+        local box = Instance.new("BoxHandleAdornment")
+        box.Name = "PlayerTrackerBox"
+        box.Color3 = Color3.fromRGB(255, 255, 255)
+        box.Transparency = 0.5
+        box.Adornee = character
+        box.AlwaysOnTop = true
+        box.ZIndex = 10
+        box.Size = character:GetExtentsSize() * 1.2
+        box.Parent = character
+        trackedPlayers[player].box = box
+        
+        -- 创建头顶标签
+        local billboard = Instance.new("BillboardGui")
+        billboard.Name = "PlayerTrackerBillboard"
+        billboard.AlwaysOnTop = true
+        billboard.Size = UDim2.new(0, 200, 0, 50)
+        billboard.StudsOffset = Vector3.new(0, 3, 0)
+        billboard.Adornee = character.Head
+        
+        local textLabel = Instance.new("TextLabel")
+        textLabel.Text = player.Name
+        textLabel.Size = UDim2.new(1, 0, 1, 0)
+        textLabel.BackgroundTransparency = 1
+        textLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+        textLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+        textLabel.TextStrokeTransparency = 0
+        textLabel.Font = Enum.Font.SourceSansBold
+        textLabel.TextSize = 20
+        textLabel.Parent = billboard
+        
+        billboard.Parent = character
+        trackedPlayers[player].billboard = billboard
+    end
+    
+    if player.Character then
+        setupCharacter(player.Character)
+    end
+    
+    player.CharacterAdded:Connect(setupCharacter)
+    
+    player.AncestryChanged:Connect(function(_, parent)
+        if not parent then
+            if trackedPlayers[player] then
+                if trackedPlayers[player].highlight then
+                    trackedPlayers[player].highlight:Destroy()
+                end
+                if trackedPlayers[player].box then
+                    trackedPlayers[player].box:Destroy()
+                end
+                if trackedPlayers[player].billboard then
+                    trackedPlayers[player].billboard:Destroy()
+                end
+                trackedPlayers[player] = nil
+            end
+        end
+    end)
+end
+
+-- 改进后的更新循环
+function StartTracking()
+    StopTracking()
+    
+    for _, player in ipairs(game:GetService("Players"):GetPlayers()) do
+        if player ~= game:GetService("Players").LocalPlayer then
+            TrackPlayer(player)
+        end
+    end
+    
+    game:GetService("Players").PlayerAdded:Connect(function(player)
+        if trackingEnabled then
+            TrackPlayer(player)
+        end
+    end)
+    
+    trackedPlayers.updateConnection = game:GetService("RunService").Heartbeat:Connect(function()
+        if not trackingEnabled then return end
+        
+        local camera = workspace.CurrentCamera
+        local localPlayer = game:GetService("Players").LocalPlayer
+        
+        for player, trackingInfo in pairs(trackedPlayers) do
+            if player and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                local character = player.Character
+                local rootPart = character.HumanoidRootPart
+                
+                -- 更新轮廓位置
+                if trackingInfo.highlight then
+                    trackingInfo.highlight.Adornee = rootPart
+                end
+                
+                -- 更新方框大小和位置（基于视角动态调整）
+                if trackingInfo.box then
+                    -- 计算模型包围盒大小
+                    local size = character:GetExtentsSize() * 1.2
+                    
+                    -- 根据距离调整大小（近大远小效果）
+                    if camera and localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                        local distance = (camera.CFrame.Position - rootPart.Position).Magnitude
+                        local scaleFactor = math.clamp(1 + (50 / distance), 1.1, 3)
+                        size = size * scaleFactor
+                    end
+                    
+                    trackingInfo.box.Size = size
+                    trackingInfo.box.CFrame = rootPart.CFrame
+                end
+                
+                -- 更新头顶标签
+                if trackingInfo.billboard then
+                    trackingInfo.billboard.Adornee = character.Head or rootPart
+                end
+            end
+        end
+    end)
+end
+
+-- 停止追踪函数
+function StopTracking()
+    if trackedPlayers.updateConnection then
+        trackedPlayers.updateConnection:Disconnect()
+        trackedPlayers.updateConnection = nil
+    end
+    
+    for player, trackingInfo in pairs(trackedPlayers) do
+        if trackingInfo.highlight then
+            trackingInfo.highlight:Destroy()
+        end
+        if trackingInfo.box then
+            trackingInfo.box:Destroy()
+        end
+        if trackingInfo.billboard then
+            trackingInfo.billboard:Destroy()
+        end
+    end
+    
+    trackedPlayers = {}
+end
+
+-- 系统功能部分
+local FunctionsTab = Window:CreateTab("系统", 4483362458)
+local FunctionsSection = FunctionsTab:CreateSection("系统操作")
+
+FunctionsSection:AddButton({
+    Name = "重置设置",
+    Callback = function()
+        walkSpeed = 16
+        jumpPower = 50
+        cameraFov = 70
+        ApplyPlayerProperties()
+        Rayfield:Notify({
+            Title = "设置已重置",
+            Content = "所有属性已恢复默认值",
+            Duration = 3,
+            Image = 4483362458
+        })
+    end
+})
+
+FunctionsSection:AddButton({
+    Name = "退出脚本",
+    Callback = function()
+        StopTracking()
+        RemoveCrosshair()
+        Rayfield:Destroy()
+        getgenv().AirHub = nil
+    end
+})
+
+-- 初始应用属性
+ApplyPlayerProperties()
+
+-- 加载配置
+Rayfield:LoadConfiguration()
+
+-- 初始通知
+Rayfield:Notify({
+    Title = "系统就绪",
+    Content = "高级玩家追踪器已加载完成",
+    Duration = 3,
+    Image = 4483362458
+})
