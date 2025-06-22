@@ -30,8 +30,8 @@ callback.OnInvoke = function(choice)
             warn("脚本执行失败: "..tostring(err))
             game:GetService("StarterGui"):SetCore("SendNotification", {
                 Title = "错误",
-                Text = "执行失败: "..tostring(err),
-                Duration = 5,
+                Text = "执行者复制失败请到Q群内获取(脚本内复制): "..tostring(err),
+                Duration = 12,
                 Icon = "rbxassetid://6238537240"
             })
         end
@@ -43,7 +43,7 @@ end
 -- 发送带图片的通知
 game:GetService("StarterGui"):SetCore("SendNotification", {
     Title = "全新脚本来了",
-    Text = "全新UI，全新的脚本（飞扬存储功能未添加在里面后续更新）",
+    Text = "全新UI，全新的脚本（一次飞扬尘土的旅行已包含在内）",
     Duration = 12,                  -- 12秒后自动消失（设为 0 则不自动关闭）
     Icon = "rbxassetid://6238537240", -- 使用Roblox默认图标
     Button1 = "复制并运行",
