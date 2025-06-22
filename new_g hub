@@ -255,6 +255,104 @@ local FovInput = MainTab:CreateInput({
     end,
 })
 
+-- 创建"一次飞扬尘土的旅行"选项卡
+local TeleportTab = Window:CreateTab("一次飞扬尘土的旅行", 4483362458)
+
+-- 添加运行飞扬尘土脚本按钮
+TeleportTab:CreateButton({
+    Name = "运行飞扬尘土脚本",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/xxqLgnd/Utilities/main/DustyTrip",true))()
+    end
+})
+
+-- 添加传送按钮组
+TeleportTab:CreateSection("地图传送功能[除了大厅，沙漠，草原.高地其他的仅带红镭射以及AK或者手枪]")
+
+TeleportTab:CreateButton({
+    Name = "传送[大厅]",
+    Callback = function()
+        game:GetService('TeleportService'):Teleport(16389395869, game.Players.LocalPlayer)
+    end
+})
+
+TeleportTab:CreateButton({
+    Name = "传送[沙漠]",
+    Callback = function()
+        game:GetService('TeleportService'):Teleport(16389398622, game.Players.LocalPlayer)
+    end
+})
+
+TeleportTab:CreateButton({
+    Name = "传送[旧版大厅] (警告:清空背包)",
+    Callback = function()
+        game:GetService('TeleportService'):Teleport(17527910461, game.Players.LocalPlayer)
+    end
+})
+
+TeleportTab:CreateButton({
+    Name = "传送[草原]",
+    Callback = function()
+        game:GetService('TeleportService'):Teleport(17527914941, game.Players.LocalPlayer)
+    end
+})
+
+TeleportTab:CreateButton({
+    Name = "传送[经典] (仅带AK/红镭射)",
+    Callback = function()
+        game:GetService('TeleportService'):Teleport(17584310335, game.Players.LocalPlayer)
+    end
+})
+
+TeleportTab:CreateButton({
+    Name = "传送[旧版大厅2] (清空背包)",
+    Callback = function()
+        game:GetService('TeleportService'):Teleport(18140826950, game.Players.LocalPlayer)
+    end
+})
+
+TeleportTab:CreateButton({
+    Name = "传送[德比] (推荐先传大厅)",
+    Callback = function()
+        game:GetService('TeleportService'):Teleport(18369214747, game.Players.LocalPlayer)
+    end
+})
+
+TeleportTab:CreateButton({
+    Name = "传送[德比大厅]",
+    Callback = function()
+        game:GetService('TeleportService'):Teleport(18369256317, game.Players.LocalPlayer)
+    end
+})
+
+TeleportTab:CreateButton({
+    Name = "传送[圣诞节] (仅带AK/红镭射)",
+    Callback = function()
+        game:GetService('TeleportService'):Teleport(72639813364968, game.Players.LocalPlayer)
+    end
+})
+
+TeleportTab:CreateButton({
+    Name = "传送[万圣节] (清空背包)",
+    Callback = function()
+        game:GetService('TeleportService'):Teleport(98422814745197, game.Players.LocalPlayer)
+    end
+})
+
+TeleportTab:CreateButton({
+    Name = "传送[沙丘] (清空背包)",
+    Callback = function()
+        game:GetService('TeleportService'):Teleport(100786491362796, game.Players.LocalPlayer)
+    end
+})
+
+TeleportTab:CreateButton({
+    Name = "传送[高地]",
+    Callback = function()
+        game:GetService('TeleportService'):Teleport(125581464504341, game.Players.LocalPlayer)
+    end
+})
+
 -- 应用玩家属性函数
 function ApplyPlayerProperties()
     local player = game:GetService("Players").LocalPlayer
@@ -282,7 +380,7 @@ function CreateCrosshair()
     screenGui.Name = "CrosshairGui"
     screenGui.ResetOnSpawn = false
     screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-    screenGui.Parent = playerGui
+    screenGui.PParent = playerGui
     
     crosshairFrame = Instance.new("Frame")
     crosshairFrame.Name = "Crosshair"
