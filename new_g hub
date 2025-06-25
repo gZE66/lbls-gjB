@@ -28,6 +28,7 @@ AboutTab:CreateLabel("- 玩家追踪与高亮显示")
 AboutTab:CreateLabel("- 属性修改器")
 AboutTab:CreateLabel("- 飞行与穿墙功能")
 AboutTab:CreateLabel("- 准星辅助")
+AboutTab:CreateLabel("- 聊天记录器")
 
 -- 创建"主要"选项卡
 local MainTab = Window:CreateTab("主要", 4483362458)
@@ -141,6 +142,40 @@ MainTab:CreateButton({
             Rayfield:Notify({
                 Title = "加载失败",
                 Content = "无法加载穿墙脚本: "..tostring(err),
+                Duration = 5,
+                Image = 4483362458
+            })
+        end
+    end,
+})
+
+-- 添加聊天记录器按钮
+MainTab:CreateButton({
+    Name = "聊天记录器",
+    Callback = function()
+        Rayfield:Notify({
+            Title = "正在加载聊天记录器",
+            Content = "请稍候...",
+            Duration = 3,
+            Image = 4483362458
+        })
+        
+        -- 加载聊天记录器脚本
+        local success, err = pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/gZE66/lbls-gjB/refs/heads/main/gao%20hub%20LT"))()
+        end)
+        
+        if success then
+            Rayfield:Notify({
+                Title = "聊天记录器已启用",
+                Content = "聊天记录功能已加载",
+                Duration = 5,
+                Image = 4483362458
+            })
+        else
+            Rayfield:Notify({
+                Title = "加载失败",
+                Content = "无法加载聊天记录器: "..tostring(err),
                 Duration = 5,
                 Image = 4483362458
             })
@@ -423,7 +458,7 @@ function CreateCrosshair()
     crosshairFrame.AnchorPoint = Vector2.new(0.5, 0.5)
     crosshairFrame.BackgroundTransparency = 1
     crosshairFrame.ZIndex = 9999
-    crosshairFrame.Parent = screenGui
+    crosshairFrame.PParent = screenGui
     
     local circle = Instance.new("Frame")
     circle.Name = "Circle"
@@ -435,9 +470,9 @@ function CreateCrosshair()
     
     local corner = Instance.new("UICorner")
     corner.CornerRadius = UDim.new(1, 0)
-    corner.Parent = circle
+    corner.PParent = circle
     
-    circle.Parent = crosshairFrame
+    circle.PParent = crosshairFrame
 end
 
 -- 移除准星函数
@@ -467,7 +502,7 @@ function TrackPlayer(player)
         highlight.FillTransparency = 0.7
         highlight.OutlineTransparency = 0.3
         highlight.Adornee = character.HumanoidRootPart
-        highlight.Parent = character
+        highlight.PParent = character
         trackedPlayers[player].highlight = highlight
         
         -- 创建动态方框
@@ -479,7 +514,7 @@ function TrackPlayer(player)
         box.AlwaysOnTop = true
         box.ZIndex = 10
         box.Size = character:GetExtentsSize() * 1.2
-        box.Parent = character
+        box.PParent = character
         trackedPlayers[player].box = box
         
         -- 创建头顶标签
@@ -499,7 +534,7 @@ function TrackPlayer(player)
         textLabel.TextStrokeTransparency = 0
         textLabel.Font = Enum.Font.SourceSansBold
         textLabel.TextSize = 20
-        textLabel.Parent = billboard
+        textLabel.PParent = billboard
         
         billboard.PParent = character
         trackedPlayers[player].billboard = billboard
