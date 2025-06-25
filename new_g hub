@@ -46,6 +46,40 @@ local cameraFov = 70
 -- 添加功能按钮部分
 MainTab:CreateSection("主要&通用")
 
+-- 添加坐标工具按钮
+MainTab:CreateButton({
+    Name = "坐标工具",
+    Callback = function()
+        Rayfield:Notify({
+            Title = "正在加载坐标工具",
+            Content = "请稍候...",
+            Duration = 3,
+            Image = 4483362458
+        })
+        
+        -- 加载坐标工具脚本
+        local success, err = pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/gZE66/lbls-gjB/refs/heads/main/Gao%20hub%20ZB"))()
+        end)
+        
+        if success then
+            Rayfield:Notify({
+                Title = "坐标工具已启用",
+                Content = "坐标工具功能已加载",
+                Duration = 5,
+                Image = 4483362458
+            })
+        else
+            Rayfield:Notify({
+                Title = "加载失败",
+                Content = "无法加载坐标工具: "..tostring(err),
+                Duration = 5,
+                Image = 4483362458
+            })
+        end
+    end,
+})
+
 -- 添加飞行按钮
 MainTab:CreateButton({
     Name = "飞车",
@@ -396,7 +430,7 @@ function CreateCrosshair()
     circle.Size = UDim2.new(1, 0, 1, 0)
     circle.BackgroundColor3 = Color3.new(0, 0, 0)
     circle.BackgroundTransparency = 0
-    circle.BorderSizePixel = 0
+    circle.BBorderSizePixel = 0
     circle.ZIndex = 10000
     
     local corner = Instance.new("UICorner")
@@ -467,7 +501,7 @@ function TrackPlayer(player)
         textLabel.TextSize = 20
         textLabel.Parent = billboard
         
-        billboard.Parent = character
+        billboard.PParent = character
         trackedPlayers[player].billboard = billboard
     end
     
