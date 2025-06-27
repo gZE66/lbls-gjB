@@ -1,7 +1,7 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
-    Name = "高脚本【测试阶段】",
+    Name = "高脚本",
     LoadingTitle = "正在加载功能...",
     LoadingSubtitle = "by qq高老八",
     ConfigurationSaving = {
@@ -16,7 +16,7 @@ local Window = Rayfield:CreateWindow({
 local AboutTab = Window:CreateTab("关于", 4483362458)
 AboutTab:CreateSection("脚本信息")
 AboutTab:CreateLabel("高级玩家追踪与控制脚本")
-AboutTab:CreateLabel("v0.2")
+AboutTab:CreateLabel("v0.50'")
 AboutTab:CreateLabel("作者: qq高老八")
 AboutTab:CreateSection("功能说明")
 AboutTab:CreateLabel("- 玩家追踪与高亮显示")
@@ -36,10 +36,11 @@ local jumpPower = 50
 local cameraFov = 70
 
 MainTab:CreateSection("主要&通用")
-MainTab:CreateButton({Name = "坐标工具", Callback = function() loadstring(game:HttpGet("链接1"))() end})
-MainTab:CreateButton({Name = "飞车", Callback = function() loadstring(game:HttpGet("链接2"))() end})
-MainTab:CreateButton({Name = "穿墙脚本", Callback = function() loadstring(game:HttpGet("链接3"))() end})
-MainTab:CreateButton({Name = "聊天记录器", Callback = function() loadstring(game:HttpGet("链接4"))() end})
+MainTab:CreateButton({Name = "飞行v3", Callback = function() loadstring(game:HttpGet("https://pastebin.com/raw/WPju1s9E"))() end})
+MainTab:CreateButton({Name = "坐标工具", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/gZE66/lbls-gjB/refs/heads/main/Gao%20hub%20ZB"))() end})
+MainTab:CreateButton({Name = "飞车", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/gZE66/lbls-gjB/refs/heads/main/vfly"))() end})
+MainTab:CreateButton({Name = "穿墙脚本", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/gZE66/lbls-gjB/refs/heads/main/nc"))() end})
+MainTab:CreateButton({Name = "聊天记录器", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/gZE66/lbls-gjB/refs/heads/main/gao%20hub%20LT"))() end})
 
 MainTab:CreateSection("玩家追踪设置")
 local TrackingToggle = MainTab:CreateToggle({
@@ -133,7 +134,7 @@ DoorsTab:CreateButton({Name = "神圣炸弹", Callback = function() loadstring(g
 
 -- 一次飞扬尘土的旅行选项卡
 local TeleportTab = Window:CreateTab("一次飞扬尘土的旅行", 4483362458)
-TeleportTab:CreateButton({Name = "运行飞扬尘土脚本", Callback = function() loadstring(game:HttpGet("链接5",true))() end})
+TeleportTab:CreateButton({Name = "运行飞扬尘土脚本", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/xxqLgnd/Utilities/main/DustyTrip",true))() end})
 TeleportTab:CreateSection("地图传送功能[除了大厅，沙漠，草原.高地其他的仅带红镭射以及AK或者手枪]")
 TeleportTab:CreateButton({Name = "传送[大厅]", Callback = function() game:GetService('TeleportService'):Teleport(16389395869, game.Players.LocalPlayer) end})
 TeleportTab:CreateButton({Name = "传送[沙漠]", Callback = function() game:GetService('TeleportService'):Teleport(16389398622, game.Players.LocalPlayer) end})
@@ -335,7 +336,7 @@ game:GetService("Players").LocalPlayer.CharacterAdded:Connect(ApplyPlayerPropert
 Rayfield:LoadConfiguration()
 Rayfield:Notify({
     Title = "系统就绪",
-    Content = "高级玩家追踪器已加载完成",
+    Content = "已加载完成",
     Duration = 3,
     Image = 4483362458
 })
