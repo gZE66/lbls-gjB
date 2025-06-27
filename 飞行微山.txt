@@ -1,4 +1,4 @@
-"local main = Instance.new("ScreenGui")
+local main = Instance.new("ScreenGui")
 local Frame = Instance.new("Frame")
 local up = Instance.new("TextButton")
 local down = Instance.new("TextButton")
@@ -471,5 +471,4 @@ mini2.MouseButton1Click:Connect(function()
 	mini2.Visible = false
 	main.Frame.BackgroundTransparency = 0 
 	closebutton.Position =  UDim2.new(0, 0, -1, 27)
-end)"
- https://raw.githubusercontent.com/WSbuq/-/main/%E7%A7%8B%E7%9A%84%E9%A3%9E%E8%A1%8CV3#:~:text=local%20main%20%3D%20Instance,1%2C%2027)%0Aend)
+end)
