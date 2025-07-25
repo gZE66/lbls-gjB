@@ -1,0 +1,37 @@
+return {
+    users = {
+        {
+            username = "Gao_hubQQDzn",
+            password = "111'"
+        },
+        {
+            username = "Gao_hubYHQQYM",
+            password = "MMQcDA\""
+        },
+        -- 账户1
+        {
+            username = "Admin_GaoHub",
+            password = "P@ssw0rd!2025"
+        },
+        -- 账户2
+        {
+            username = "TestUser_01",
+            password = "123456"
+        },
+        -- 账户3
+        {
+            username = "Dev_Account",
+            password = "My Secret#Key"
+        },
+        -- 账户4
+        {
+            username = "System_Backup",
+            password = "GaoHub$Secure*Backup&2025"
+        },
+        -- 账5
+        {
+            username = "API_Access",
+            password = "Zxcv1234!@#$"
+        }
+    }
+}
