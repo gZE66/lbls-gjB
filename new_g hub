@@ -13,7 +13,7 @@ local Window = Rayfield:CreateWindow({
 })
 
 -- 关于选项卡
-local AboutTab = Window:CreateTab("公告", 104277533075614)
+local AboutTab = Window:CreateTab("公告", 92573130667394)
 AboutTab:CreateSection("最新消息")
 AboutTab:CreateLabel("Gao hub")
 AboutTab:CreateLabel("v1.0正式版")
@@ -21,7 +21,7 @@ AboutTab:CreateLabel("作者: qq高老八[3211588615]")
 AboutTab:CreateSection("注意事项以及更新了什么？")
 AboutTab:CreateLabel("- 最新已更新登录系统，如果需要注册普通账号，可以联系作者或者去交流群，交流群[1022556003]")
 AboutTab:CreateLabel("- 关于如何特殊账号获取，首先你得是作者朋友，并且经常一起玩才可以")
-AboutTab:CreateLabel("- 飞行与穿墙功能")
+AboutTab:CreateLabel("- [免责声明]当你使用Gao hub导致你的账号被封禁时，我们概不负责")
 AboutTab:CreateLabel("- 准星辅助")
 AboutTab:CreateLabel("- 聊天记录器")
 
@@ -335,8 +335,8 @@ end
 game:GetService("Players").LocalPlayer.CharacterAdded:Connect(ApplyPlayerProperties)
 Rayfield:LoadConfiguration()
 Rayfield:Notify({
-    Title = "系统就绪",
+    Title = "Gao hub就绪",
     Content = "已加载完成",
     Duration = 3,
-    Image = 4483362458
+    Image = 92573130667394
 })
