@@ -1,10 +1,6 @@
 {
   "users": [
-    {"username": "test1", "password": "123"},
-    {"username": "test2", "password": "456", "encrypted": true},
-    {"username": "user3", "password": "789abc", "encrypted": false},
-    {"username": "user4", "password": "pa$$w0rd", "encrypted": true},
-    {"username": "admin5", "password": "Admin@2025", "encrypted": true},
-    {"username": "guest6", "password": "guest123", "encrypted": false}
+      {"username": "test1", "password": "123"},
+      {"username": "test2", "password": "456", "encrypted": true}
   ]
 }
