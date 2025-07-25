@@ -1,6 +1,6 @@
 -- 😱😱😱
 local users = {
-    { username = "user1", password = "pass123" },
+    { username = "1", password = "1" },
     { username = "test_user", password = "test@2025" },
     { username = "admin_demo", password = "Admin!Demo" },
     { username = "dev_team", password = "DevTeam#789" },
