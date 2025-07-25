@@ -1,37 +1,31 @@
-return {
-    users = {
-        {
-            username = "Gao_hubQQDzn",
-            password = "111'"
-        },
-        {
-            username = "Gao_hubYHQQYM",
-            password = "MMQcDA\""
-        },
-        -- 账户1
-        {
-            username = "CS",
-            password = "123"
-        },
-        -- 账户2
-        {
-            username = "TestUser_01",
-            password = "123456"
-        },
-        -- 账户3
-        {
-            username = "Dev_Account",
-            password = "My Secret#Key"
-        },
-        -- 账户4
-        {
-            username = "System_Backup",
-            password = "GaoHub$Secure*Backup&2025"
-        },
-        -- 账5
-        {
-            username = "API_Access",
-            password = "Zxcv1234!@#$"
-        }
+{
+  "users": [
+    {
+      "username": "test1",
+      "password": "123"
+    },
+    {
+      "username": "test2",
+      "password": "456",
+      "encrypted": true
+    },
+    {
+      "username": "user3",
+      "password": "789abc"
+    },
+    {
+      "username": "user4",
+      "password": "pa$$w0rd",
+      "encrypted": true
+    },
+    {
+      "username": "admin5",
+      "password": "Admin@2025",
+      "encrypted": true
+    },
+    {
+      "username": "guest6",
+      "password": "guest123"
     }
+  ]
 }
