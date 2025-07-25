@@ -10,8 +10,8 @@ return {
         },
         -- 账户1
         {
-            username = "Admin_GaoHub",
-            password = "P@ssw0rd!2025"
+            username = "CS",
+            password = "123"
         },
         -- 账户2
         {
