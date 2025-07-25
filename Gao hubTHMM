@@ -1,0 +1,12 @@
+return {
+    users = {
+        {
+            username = "Gao_hubYHT3Q5",
+            password = "MMQ348'"
+        },
+        {
+            username = "Gao_hubYHCFG6",
+            password = "MMQcDA""
+        }
+    }
+}
