@@ -36,6 +36,8 @@ local jumpPower = 50
 local cameraFov = 70
 
 MainTab:CreateSection("主要&通用")
+MainTab:CreateButton({Name = "音乐播放器", Callback = function() loadstring(game:HttpGet("https://pastebin.com/raw/2uK7LALM"))() end})
+MainTab:CreateButton({Name = "NPC范围[有些服务器会影响范围球连接导致失效]", Callback = function() loadstring(game:HttpGet("https://pastebin.com/raw/pQyMvTEJ"))() end})
 MainTab:CreateButton({Name = "快速互动工具[测试中]", Callback = function() loadstring(game:HttpGet("https://pastebin.com/raw/yB4mP8sa"))() end})
 MainTab:CreateButton({Name = "飞行v3", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/gZE66/78/refs/heads/main/gfx.txt"))() end})
 MainTab:CreateButton({Name = "坐标工具", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/gZE66/lbls-gjB/refs/heads/main/Gao%20hub%20ZB"))() end})
