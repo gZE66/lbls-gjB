@@ -36,6 +36,7 @@ local jumpPower = 50
 local cameraFov = 70
 
 MainTab:CreateSection("主要&通用")
+MainTab:CreateButton({Name = "快速互动工具[测试中]", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/gZE66/78/refs/heads/main/Gao%20hubkshd?token=GHSAT0AAAAAADH5MQHEE6EL6HCA2F335FR22EEJM4A"))() end})
 MainTab:CreateButton({Name = "飞行v3", Callback = function() loadstring(game:HttpGet("https://pastebin.com/raw/WPju1s9E"))() end})
 MainTab:CreateButton({Name = "坐标工具", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/gZE66/lbls-gjB/refs/heads/main/Gao%20hub%20ZB"))() end})
 MainTab:CreateButton({Name = "飞车", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/gZE66/lbls-gjB/refs/heads/main/vfly"))() end})
