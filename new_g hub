@@ -36,6 +36,7 @@ local jumpPower = 50
 local cameraFov = 70
 
 MainTab:CreateSection("主要&通用")
+MainTab:CreateButton({Name = "NPC定位", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/gZE66/78/refs/heads/main/swdw"))() end})
 MainTab:CreateButton({Name = "音乐播放器", Callback = function() loadstring(game:HttpGet("https://pastebin.com/raw/2uK7LALM"))() end})
 MainTab:CreateButton({Name = "NPC范围[有些服务器会影响范围球连接导致失效]", Callback = function() loadstring(game:HttpGet("https://pastebin.com/raw/pQyMvTEJ"))() end})
 MainTab:CreateButton({Name = "快速互动工具[测试中]", Callback = function() loadstring(game:HttpGet("https://pastebin.com/raw/yB4mP8sa"))() end})
