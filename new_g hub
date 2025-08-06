@@ -13,7 +13,7 @@ local Window = Rayfield:CreateWindow({
 })
 
 -- 关于选项卡
-local AboutTab = Window:CreateTab("公告", 92573130667394)
+local AboutTab = Window:CreateTab("公告", 81856608195726)
 AboutTab:CreateSection("最新消息")
 AboutTab:CreateLabel("Gao hub")
 AboutTab:CreateLabel("v1.1正式版")
@@ -26,7 +26,7 @@ AboutTab:CreateLabel("- 准星辅助")
 AboutTab:CreateLabel("- 聊天记录器")
 
 -- 主要选项卡
-local MainTab = Window:CreateTab("主要", 4483362458)
+local MainTab = Window:CreateTab("主要", 81856608195726)
 local trackedPlayers = {}
 local trackingEnabled = false
 local crosshairEnabled = false
