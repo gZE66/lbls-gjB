@@ -36,6 +36,7 @@ local jumpPower = 50
 local cameraFov = 70
 
 MainTab:CreateSection("主要&通用")
+MainTab:CreateButton({Name = "显示FPS", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/gZE66/78/refs/heads/main/Gao%20hub%20fpsw"))() end})
 MainTab:CreateButton({Name = "Na脚本", Callback = function() loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-nameless-admin-15646"))() end})
 MainTab:CreateButton({Name = "标记点外国管这叫猫点", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/gZE66/78/refs/heads/main/GaoBJ"))() end})
 MainTab:CreateButton({Name = "NPC定位", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/gZE66/78/refs/heads/main/swdw"))() end})
