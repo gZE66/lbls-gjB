@@ -1,0 +1,358 @@
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+    Name = "高脚本[Gao hub]",
+    LoadingTitle = "正在加载功能...",
+    LoadingSubtitle = "by qq高老八",
+    ConfigurationSaving = {
+        Enabled = true,
+        FolderName = "AdvancedPlayerTracker",
+        FileName = "Config"
+    },
+    KeySystem = false
+})
+
+-- 关于选项卡
+local AboutTab = Window:CreateTab("公告", 81856608195726)
+AboutTab:CreateSection("最新消息")
+AboutTab:CreateLabel("Gao hub")
+AboutTab:CreateLabel("v1.1正式版")
+AboutTab:CreateLabel("作者: qq高老八[3211588615]")
+AboutTab:CreateSection("注意事项以及更新了什么？")
+AboutTab:CreateLabel("- 最新已更新登录系统，如果需要注册普通账号，可以联系作者或者去交流群，交流群[1022556003]")
+AboutTab:CreateLabel("- 关于如何特殊账号获取，首先你得是作者朋友，并且经常一起玩才可以")
+AboutTab:CreateLabel("- [免责声明]当你使用Gao hub导致你的账号被封禁时，我们概不负责")
+AboutTab:CreateLabel("- 准星辅助")
+AboutTab:CreateLabel("- 聊天记录器")
+
+-- 主要选项卡
+local MainTab = Window:CreateTab("主要", 81856608195726)
+local trackedPlayers = {}
+local trackingEnabled = false
+local crosshairEnabled = false
+local crosshairFrame = nil
+local walkSpeed = 16
+local jumpPower = 50
+local cameraFov = 70
+
+MainTab:CreateSection("主要&通用")
+MainTab:CreateButton({Name = "显示FPS", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/gZE66/78/refs/heads/main/Gao%20hub%20fpsw"))() end})
+MainTab:CreateButton({Name = "Na脚本", Callback = function() loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-nameless-admin-15646"))() end})
+MainTab:CreateButton({Name = "标记点外国管这叫猫点", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/gZE66/78/refs/heads/main/GaoBJ"))() end})
+MainTab:CreateButton({Name = "NPC定位", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/gZE66/78/refs/heads/main/swdw"))() end})
+MainTab:CreateButton({Name = "音乐播放器", Callback = function() loadstring(game:HttpGet("https://pastebin.com/raw/2uK7LALM"))() end})
+MainTab:CreateButton({Name = "NPC范围[有些服务器会影响范围球连接导致失效]", Callback = function() loadstring(game:HttpGet("https://pastebin.com/raw/pQyMvTEJ"))() end})
+MainTab:CreateButton({Name = "快速互动工具[测试中]", Callback = function() loadstring(game:HttpGet("https://pastebin.com/raw/yB4mP8sa"))() end})
+MainTab:CreateButton({Name = "飞行v3", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/gZE66/78/refs/heads/main/gfx.txt"))() end})
+MainTab:CreateButton({Name = "坐标工具", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/gZE66/lbls-gjB/refs/heads/main/Gao%20hub%20ZB"))() end})
+MainTab:CreateButton({Name = "飞车", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/gZE66/lbls-gjB/refs/heads/main/vfly"))() end})
+MainTab:CreateButton({Name = "穿墙脚本", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/gZE66/lbls-gjB/refs/heads/main/nc"))() end})
+MainTab:CreateButton({Name = "聊天记录器", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/gZE66/lbls-gjB/refs/heads/main/gao%20hub%20LT"))() end})
+
+MainTab:CreateSection("玩家追踪设置")
+local TrackingToggle = MainTab:CreateToggle({
+    Name = "定位玩家【高老八自制】",
+    CurrentValue = false,
+    Flag = "PlayerTrackingToggle",
+    Callback = function(Value)
+        trackingEnabled = Value
+        if Value then StartTracking() else StopTracking() end
+    end
+})
+
+local CrosshairToggle = MainTab:CreateToggle({
+    Name = "辅助准星",
+    CurrentValue = false,
+    Flag = "CrosshairToggle",
+    Callback = function(Value)
+        crosshairEnabled = Value
+        if Value then CreateCrosshair() else RemoveCrosshair() end
+    end
+})
+
+MainTab:CreateSection("玩家属性修改")
+MainTab:CreateInput({
+    Name = "移动速度 (默认16)",
+    PlaceholderText = tostring(walkSpeed),
+    RemoveTextAfterFocusLost = false,
+    Callback = function(Text) walkSpeed = tonumber(Text) or walkSpeed end
+})
+
+MainTab:CreateInput({
+    Name = "跳跃高度 (默认50)",
+    PlaceholderText = tostring(jumpPower),
+    RemoveTextAfterFocusLost = false,
+    Callback = function(Text) jumpPower = tonumber(Text) or jumpPower end
+})
+
+MainTab:CreateInput({
+    Name = "视野范围 (默认70)",
+    PlaceholderText = tostring(cameraFov),
+    RemoveTextAfterFocusLost = false,
+    Callback = function(Text) cameraFov = tonumber(Text) or cameraFov end
+})
+
+MainTab:CreateSection("通用功能")
+MainTab:CreateToggle({Name = "夜视", Callback = function(Value) game.Lighting.Ambient = Value and Color3.new(1,1,1) or Color3.new(0,0,0) end})
+MainTab:CreateToggle({Name = "自动互动", Callback = function(Value) autoInteract = Value end})
+MainTab:CreateToggle({Name = "无限跳", Callback = function(Value) Jump = Value end})
+MainTab:CreateSlider({Name = "步行速度", Range = {16,400}, Increment = 1, CurrentValue = 16})
+MainTab:CreateSlider({Name = "跳跃高度", Range = {50,400}, Increment = 1, CurrentValue = 50})
+MainTab:CreateButton({Name = "甩人", Callback = function() loadstring(game:HttpGet("https://pastebin.com/raw/zqyDSUWX"))() end})
+MainTab:CreateSlider({Name = "设置重力", Range = {196.2,1000}, Increment = 1, CurrentValue = 196.2})
+MainTab:CreateButton({Name = "替身", Callback = function() loadstring(game:HttpGet('https://raw.githubusercontent.com/SkrillexMe/SkrillexLoader/main/SkrillexLoadMain'))() end})
+MainTab:CreateButton({Name = "爬墙", Callback = function() loadstring(game:HttpGet("https://pastebin.com/raw/zXk4Rq2r"))() end})
+MainTab:CreateButton({Name = "iw指令", Callback = function() loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'),true)() end})
+MainTab:CreateButton({Name = "光影", Callback = function() loadstring(game:HttpGet("https://pastebin.com/raw/arzRCgwS"))() end})
+MainTab:CreateButton({Name = "光影2", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/MZEEN2424/Graphics/main/Graphics.xml"))() end})
+MainTab:CreateButton({Name = "建筑工具", Callback = function() end})
+MainTab:CreateButton({Name = "画质", Callback = function() loadstring(game:HttpGet("https://pastebin.com/raw/jHBfJYmS"))() end})
+MainTab:CreateButton({Name = "旋转", Callback = function() loadstring(game:HttpGet('https://pastebin.com/raw/r97d7dS0', true))() end})
+MainTab:CreateButton({Name = "飞行", Callback = function() loadstring(game:HttpGet('https://pastebin.com/raw/U27yQRxS'))() end})
+MainTab:CreateButton({Name = "速度更改", Callback = function() loadstring(game:HttpGet("https://pastebin.com/raw/Zuw5T7DP",true))() end})
+MainTab:CreateButton({Name = "甩飞别人", Callback = function() loadstring(game:HttpGet("https://pastebin.com/raw/GnvPVBEi"))() end})
+MainTab:CreateButton({Name = "动作", Callback = function() loadstring(game:HttpGet("https://pastebin.com/raw/Zj4NnKs6"))() end})
+MainTab:CreateButton({Name = "电脑键盘", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/advxzivhsjjdhxhsidifvsh/mobkeyboard/main/main.txt", true))() end})
+MainTab:CreateButton({Name = "铁拳", Callback = function() loadstring(game:HttpGet('https://raw.githubusercontent.com/0Ben1/fe/main/obf_rf6iQURzu1fqrytcnLBAvW34C9N55kS9g9G3CKz086rC47M6632sEd4ZZYB0AYgV.lua.txt'))() end})
+MainTab:CreateButton({Name = "无敌", Callback = function() loadstring(game:HttpGet('https://pastebin.com/raw/H3RLCWWZ'))() end})
+MainTab:CreateButton({Name = "飞车", Callback = function() loadstring(game:HttpGet("https://pastebin.com/raw/G3GnBCyC", true))() end})
+MainTab:CreateButton({Name = "转圈", Callback = function() loadstring(game:HttpGet('https://pastebin.com/raw/r97d7dS0', true))() end})
+MainTab:CreateButton({Name = "飞车2", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/dingding123hhh/vb/main/%E9%A3%9E%E8%BD%A6.lua"))() end})
+MainTab:CreateButton({Name = "吸取全部玩家", Callback = function() loadstring(game:HttpGet('https://pastebin.com/raw/hQSBGsw2'))() end})
+MainTab:CreateButton({Name = "死亡笔记", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/dingding123hhh/tt/main/%E6%AD%BB%E4%BA%A1%E7%AC%94%E8%AE%B0%20(1).txt"))() end})
+MainTab:CreateButton({Name = "甩人", Callback = function() loadstring(game:HttpGet("https://pastebin.com/raw/zqyDSUWX"))() end})
+MainTab:CreateButton({Name = "铁拳", Callback = function() loadstring(game:HttpGet('https://raw.githubusercontent.com/0Ben1/fe/main/obf_rf6iQURzu1fqrytcnLBAvW34C9N55kS9g9G3CKz086rC47M6632sEd4ZZYB0AYgV.lua.txt'))() end})
+MainTab:CreateButton({Name = "踏空", Callback = function() loadstring(game:HttpGet('https://raw.githubusercontent.com/GhostPlayer352/Test4/main/Float'))() end})
+
+-- DOORS选项卡
+local DoorsTab = Window:CreateTab("DOORS可以去其他看看", 4483362458)
+DoorsTab:CreateButton({Name = "地吸制作", Callback = function() loadstring(game:HttpGet("https://github.com/DocYogurt/F/raw/main/NB.lua"))() end})
+DoorsTab:CreateButton({Name = "汉化", Callback = function() loadstring(game:HttpGet("\104\116\116\112\115\58\47\47\112\97\115\116\101\98\105\110\46\99\111\109\47\114\97\119\47\54\53\84\119\84\56\106\97"))() end})
+DoorsTab:CreateButton({Name = "穿墙", Callback = function() loadstring(game:HttpGet("https://github.com/DXuwu/OK/raw/main/clip"))() end})
+DoorsTab:CreateButton({Name = "超级", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/GamingScripter/Darkrai-X/main/Games/Doors"))() end})
+DoorsTab:CreateButton({Name = "5", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/VaniaPerets/FolderGui-FolderHub/main/loader.lua", true))() end})
+DoorsTab:CreateButton({Name = "MS", Callback = function() loadstring(game:HttpGet(("https://raw.githubusercontent.com/mstudio45/MSDOORS/main/MSHUB_Loader.lua"),true))() end})
+DoorsTab:CreateButton({Name = "XD", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/DXuwu/test-lol/main/YO.lua"))() end})
+DoorsTab:CreateButton({Name = "无卡密陈", Callback = function() loadstring("\108\111\97\100\115\116\114\105\110\103\40\103\97\109\101\58\72\116\116\112\71\101\116\40\34\104\116\116\112\115\58\47\47\114\97\119\46\103\105\116\104\117\98\117\115\101\114\99\111\110\116\101\110\116\46\99\111\109\47\89\83\108\111\110\47\82\65\87\45\46\46\97\45\115\99\114\105\112\116\47\109\97\105\110\47\37\69\57\37\57\57\37\56\56\68\79\79\82\83\50\46\48\77\79\79\78\37\69\54\37\66\55\37\66\55\37\69\54\37\66\55\37\56\54\34\41\41\40\41")() end})
+DoorsTab:CreateButton({Name = "十字架", Callback = function() loadstring(game:HttpGet('https://raw.githubusercontent.com/PenguinManiack/Crucifix/main/Crucifix.lua'))() end})
+DoorsTab:CreateButton({Name = "紫色手电筒", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/K0t1n/Public/main/Purple%20Flashlight%20Script.lua"))() end})
+DoorsTab:CreateButton({Name = "剪刀", Callback = function() loadstring(game:HttpGet("https://pastebin.com/raw/v2yEJYmu"))() end})
+DoorsTab:CreateButton({Name = "神圣炸弹", Callback = function() loadstring(game:HttpGet("https://pastebin.com/raw/u5B1UjGv"))() end})
+
+-- 一次飞扬尘土的旅行选项卡
+local TeleportTab = Window:CreateTab("一次飞扬尘土的旅行", 4483362458)
+TeleportTab:CreateButton({Name = "运行飞扬尘土脚本", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/xxqLgnd/Utilities/main/DustyTrip",true))() end})
+TeleportTab:CreateSection("地图传送功能[除了大厅，沙漠，草原.高地其他的仅带红镭射以及AK或者手枪]")
+TeleportTab:CreateButton({Name = "传送[大厅]", Callback = function() game:GetService('TeleportService'):Teleport(16389395869, game.Players.LocalPlayer) end})
+TeleportTab:CreateButton({Name = "传送[沙漠]", Callback = function() game:GetService('TeleportService'):Teleport(16389398622, game.Players.LocalPlayer) end})
+TeleportTab:CreateButton({Name = "传送[旧版大厅] (警告:清空背包)", Callback = function() game:GetService('TeleportService'):Teleport(17527910461, game.Players.LocalPlayer) end})
+TeleportTab:CreateButton({Name = "传送[草原]", Callback = function() game:GetService('TeleportService'):Teleport(17527914941, game.Players.LocalPlayer) end})
+TeleportTab:CreateButton({Name = "传送[经典] (仅带AK/红镭射)", Callback = function() game:GetService('TeleportService'):Teleport(17584310335, game.Players.LocalPlayer) end})
+TeleportTab:CreateButton({Name = "传送[旧版大厅2] (清空背包)", Callback = function() game:GetService('TeleportService'):Teleport(18140826950, game.Players.LocalPlayer) end})
+TeleportTab:CreateButton({Name = "传送[德比] (推荐先传大厅)", Callback = function() game:GetService('TeleportService'):Teleport(18369214747, game.Players.LocalPlayer) end})
+TeleportTab:CreateButton({Name = "传送[德比大厅]", Callback = function() game:GetService('TeleportService'):Teleport(18369256317, game.Players.LocalPlayer) end})
+TeleportTab:CreateButton({Name = "传送[圣诞节] (仅带AK/红镭射)", Callback = function() game:GetService('TeleportService'):Teleport(72639813364968, game.Players.LocalPlayer) end})
+TeleportTab:CreateButton({Name = "传送[万圣节] (清空背包)", Callback = function() game:GetService('TeleportService'):Teleport(98422814745197, game.Players.LocalPlayer) end})
+TeleportTab:CreateButton({Name = "传送[沙丘] (清空背包)", Callback = function() game:GetService('TeleportService'):Teleport(100786491362796, game.Players.LocalPlayer) end})
+TeleportTab:CreateButton({Name = "传送[高地]", Callback = function() game:GetService('TeleportService'):Teleport(125581464504341, game.Players.LocalPlayer) end})
+
+local QtTab = Window:CreateTab("其他游戏", 100076418396520)
+QtTab:CreateSection("死铁轨")
+QtTab:CreateButton({Name = "死铁轨快速挥手[座椅图标的和第一个开关不能一起开，否则会被踢飞机图标的是解锁第三人称]", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/HeadHarse/Dusty/refs/heads/main/NOTV4TRUST",true))() end})
+QtTab:CreateButton({Name = "死铁轨红叶脚本[卡密可难解，建议开魔法]", Callback = function() loadstring(game:HttpGet("https://getnative.cc/script/loader"))() end})
+QtTab:CreateSection("丛林中的99夜")
+QtTab:CreateButton({Name = "丛林中的99夜[英文]", Callback = function() loadstring(game:HttpGet("https://rawscripts.net/raw/99-Nights-in-the-Forest-eF-Hub-43369"))() end})
+QtTab:CreateSection("割草机")
+QtTab:CreateButton({Name = "割草机[英文]", Callback = function() loadstring(game:HttpGet("https://rawscripts.net/raw/The-Rake-REMASTERED-LynX-v2-5347"))() end})
+
+-- 系统选项卡
+local FunctionsTab = Window:CreateTab("系统", 4483362458)
+FunctionsTab:CreateSection("系统操作")
+FunctionsTab:CreateButton({
+    Name = "重置设置",
+    Callback = function()
+        walkSpeed = 16
+        jumpPower = 50
+        cameraFov = 70
+        Rayfield:Notify({
+            Title = "设置已重置",
+            Content = "所有属性已恢复默认值",
+            Duration = 3,
+            Image = 4483362458
+        })
+    end
+})
+
+FunctionsTab:CreateButton({
+    Name = "退出脚本",
+    Callback = function()
+        Rayfield:Destroy()
+        getgenv().AirHub = nil
+    end
+})
+
+-- 辅助函数
+function ApplyPlayerProperties()
+    local player = game:GetService("Players").LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    repeat wait() until character:FindFirstChild("Humanoid")
+    character.Humanoid.WalkSpeed = walkSpeed
+    character.Humanoid.JumpPower = jumpPower
+    game:GetService("Workspace").CurrentCamera.FieldOfView = cameraFov
+end
+
+function CreateCrosshair()
+    if crosshairFrame then crosshairFrame:Destroy() end
+    local playerGui = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+    local screenGui = Instance.new("ScreenGui")
+    screenGui.Name = "CrosshairGui"
+    screenGui.ResetOnSpawn = false
+    screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    screenGui.Parent = playerGui
+    crosshairFrame = Instance.new("Frame")
+    crosshairFrame.Name = "Crosshair"
+    crosshairFrame.Size = UDim2.new(0, 20, 0, 20)
+    crosshairFrame.Position = UDim2.new(0.5, -10, 0.5, -10)
+    crosshairFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+    crosshairFrame.BackgroundTransparency = 1
+    crosshairFrame.ZIndex = 9999
+    crosshairFrame.Parent = screenGui
+    local circle = Instance.new("Frame")
+    circle.Name = "Circle"
+    circle.Size = UDim2.new(1, 0, 1, 0)
+    circle.BackgroundColor3 = Color3.new(0, 0, 0)
+    circle.BackgroundTransparency = 0
+    circle.BorderSizePixel = 0
+    circle.ZIndex = 10000
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(1, 0)
+    corner.Parent = circle
+    circle.Parent = crosshairFrame
+end
+
+function RemoveCrosshair()
+    if crosshairFrame then
+        crosshairFrame:Destroy()
+        crosshairFrame = nil
+    end
+end
+
+function TrackPlayer(player)
+    if trackedPlayers[player] then return end
+    trackedPlayers[player] = {}
+    
+    local function setupCharacter(character)
+        if not character then return end
+        repeat wait() until character:FindFirstChild("HumanoidRootPart") and character:FindFirstChild("Head")
+        
+        local highlight = Instance.new("Highlight")
+        highlight.Name = "PlayerTrackerHighlight"
+        highlight.FillColor = Color3.fromRGB(255, 255, 255)
+        highlight.OutlineColor = Color3.fromRGB(255, 255, 255)
+        highlight.FillTransparency = 0.7
+        highlight.OutlineTransparency = 0.3
+        highlight.Adornee = character.HumanoidRootPart
+        highlight.Parent = character
+        trackedPlayers[player].highlight = highlight
+        
+        local box = Instance.new("BoxHandleAdornment")
+        box.Name = "PlayerTrackerBox"
+        box.Color3 = Color3.fromRGB(255, 255, 255)
+        box.Transparency = 0.5
+        box.Adornee = character
+        box.AlwaysOnTop = true
+        box.ZIndex = 10
+        box.Size = character:GetExtentsSize() * 1.2
+        box.Parent = character
+        trackedPlayers[player].box = box
+        
+        local billboard = Instance.new("BillboardGui")
+        billboard.Name = "PlayerTrackerBillboard"
+        billboard.AlwaysOnTop = true
+        billboard.Size = UDim2.new(0, 200, 0, 50)
+        billboard.StudsOffset = Vector3.new(0, 3, 0)
+        billboard.Adornee = character.Head
+        
+        local textLabel = Instance.new("TextLabel")
+        textLabel.Text = player.Name
+        textLabel.Size = UDim2.new(1, 0, 1, 0)
+        textLabel.BackgroundTransparency = 1
+        textLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+        textLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+        textLabel.TextStrokeTransparency = 0
+        textLabel.Font = Enum.Font.SourceSansBold
+        textLabel.TextSize = 20
+        textLabel.Parent = billboard
+        
+        billboard.Parent = character
+        trackedPlayers[player].billboard = billboard
+    end
+    
+    if player.Character then setupCharacter(player.Character) end
+    player.CharacterAdded:Connect(setupCharacter)
+    player.AncestryChanged:Connect(function(_, parent)
+        if not parent and trackedPlayers[player] then
+            if trackedPlayers[player].highlight then trackedPlayers[player].highlight:Destroy() end
+            if trackedPlayers[player].box then trackedPlayers[player].box:Destroy() end
+            if trackedPlayers[player].billboard then trackedPlayers[player].billboard:Destroy() end
+            trackedPlayers[player] = nil
+        end
+    end)
+end
+
+function StartTracking()
+    StopTracking()
+    for _, player in ipairs(game:GetService("Players"):GetPlayers()) do
+        if player ~= game:GetService("Players").LocalPlayer then
+            TrackPlayer(player)
+        end
+    end
+    game:GetService("Players").PlayerAdded:Connect(function(player)
+        if trackingEnabled then TrackPlayer(player) end
+    end)
+    trackedPlayers.updateConnection = game:GetService("RunService").Heartbeat:Connect(function()
+        if not trackingEnabled then return end
+        local camera = workspace.CurrentCamera
+        local localPlayer = game:GetService("Players").LocalPlayer
+        for player, trackingInfo in pairs(trackedPlayers) do
+            if player and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                local character = player.Character
+                local rootPart = character.HumanoidRootPart
+                if trackingInfo.highlight then trackingInfo.highlight.Adornee = rootPart end
+                if trackingInfo.box then
+                    local size = character:GetExtentsSize() * 1.2
+                    if camera and localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                        local distance = (camera.CFrame.Position - rootPart.Position).Magnitude
+                        local scaleFactor = math.clamp(1 + (50 / distance), 1.1, 3)
+                        size = size * scaleFactor
+                    end
+                    trackingInfo.box.Size = size
+                    trackingInfo.box.CFrame = rootPart.CFrame
+                end
+                if trackingInfo.billboard then trackingInfo.billboard.Adornee = character.Head or rootPart end
+            end
+        end
+    end)
+end
+
+function StopTracking()
+    if trackedPlayers.updateConnection then
+        trackedPlayers.updateConnection:Disconnect()
+        trackedPlayers.updateConnection = nil
+    end
+    for player, trackingInfo in pairs(trackedPlayers) do
+        if trackingInfo.highlight then trackingInfo.highlight:Destroy() end
+        if trackingInfo.box then trackingInfo.box:Destroy() end
+        if trackingInfo.billboard then trackingInfo.billboard:Destroy() end
+    end
+    trackedPlayers = {}
+end
+
+game:GetService("Players").LocalPlayer.CharacterAdded:Connect(ApplyPlayerProperties)
+Rayfield:LoadConfiguration()
+Rayfield:Notify({
+    Title = "Gao hub就绪",
+    Content = "已加载完成",
+    Duration = 3,
+    Image = 92573130667394
+})
